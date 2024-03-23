@@ -13,3 +13,5 @@ export type Failed = {
 export type Result<T> = Succeed<T> | Failed;
 
 export type ApiHandler<T = unknown> = NextApiHandler<Result<T>>;
+
+//
