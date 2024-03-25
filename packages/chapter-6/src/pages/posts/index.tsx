@@ -9,9 +9,20 @@ type Props = {
 
 const Page = ({ posts }: Props) => {
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
+  const [newTag, setNewTag] = useState<string>('');
+  const [tags, setTags] = useState<string[]>(['Tech', 'Programming', 'Science', 'Art']);
+
   const handleTagSelect = (tag: string) => {
     setSelectedTag(tag);
   };
+
+  const handleNewTagSubmit = () => {
+    if (newTag.trim() !== '') {
+      setTags([...tags, newTag]);
+      setNewTag('');
+    }
+  };
+
   const filteredPosts = selectedTag
     ? posts.filter((post) => post.tags.includes(selectedTag))
     : posts;
@@ -21,9 +32,18 @@ const Page = ({ posts }: Props) => {
       <h1>記事一覧</h1>
       <div>
         <span>タグでフィルタリング：</span>
-        <button onClick={() => handleTagSelect("Tech")}>Tech</button>
-        <button onClick={() => handleTagSelect("Programming")}>Programming</button>
-        {/* 必要に応じて他のタグボタンを追加 */}
+        {tags.map(tag => (
+          <button key={tag} onClick={() => handleTagSelect(tag)}>{tag}</button>
+        ))}
+        <div>
+          <input
+            type="text"
+            value={newTag}
+            onChange={(e) => setNewTag(e.target.value)}
+            placeholder="新規タグを入力"
+          />
+          <button onClick={handleNewTagSubmit}>追加</button>
+        </div>
       </div>
       <ul>
         {filteredPosts.map((post) => (

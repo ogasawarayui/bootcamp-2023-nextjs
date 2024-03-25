@@ -34,7 +34,13 @@ const Page = () => {
             <ErrorMessage message={formState.errors.title?.message} />
           </label>
         </div>
-        {/* <div> ✏️ ① </div> */}
+        <div>
+          <label>
+            content:
+            <input type="text" {...register("content")} />
+            <ErrorMessage message={formState.errors.content?.message} />
+          </label>
+        </div>
       </fieldset>
       <hr />
       <button>submit</button>
