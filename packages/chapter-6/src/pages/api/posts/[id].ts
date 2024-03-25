@@ -10,8 +10,7 @@ export type UpdatePostResponse = Post;
 
 const handlePut = apiHandler<UpdatePostResponse>(async (req, res) => {
   const data = updatePostInputSchema.parse(req.body);
-  const { id } = z.object({ id: z.coerce.number() }).parse(req.query);
-  // 📌:6-4 ID が一致するレコードを更新
+  const { id } = z.object({ id: z.number() }).parse(req.query); // IDの型を適切に指定
   const result = await prisma.post.update({ data, where: { id } });
   res.status(201).json(succeed(result));
 });

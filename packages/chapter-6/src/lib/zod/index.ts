@@ -2,12 +2,12 @@ import { z } from "zod";
 
 export const createPostInputSchema = z.object({
   title: z.string(),
-  // ✏️ ①
+  content: z.string().max(128), // 128文字以内の制約を追加
 });
 
 export const updatePostInputSchema = z.object({
   title: z.string(),
-  // ✏️ ②
+  content: z.string().max(128), // 128文字以内の制約を追加
 });
 
 export type CreatePostInputSchemaType = z.infer<typeof createPostInputSchema>;
