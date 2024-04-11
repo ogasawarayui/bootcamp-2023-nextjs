@@ -33,3 +33,17 @@ export const updatePost = (
     .then((res) => handleFetchResolve<Post>(res))
     .catch(handleFetchReject);
 };
+
+// 全件取得
+export const getAllPosts = (): Promise<Result<Post[]>> => {
+  return fetch("/api/posts")
+    .then((res) => handleFetchResolve<Post[]>(res))
+    .catch(handleFetchReject);
+};
+
+// IDが一致するレコードを取得
+export const getPostById = (id: number): Promise<Result<Post>> => {
+  return fetch(`/api/posts/${id}`)
+    .then((res) => handleFetchResolve<Post>(res))
+    .catch(handleFetchReject);
+};
