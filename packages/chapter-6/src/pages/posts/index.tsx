@@ -1,10 +1,16 @@
 import { gssp } from "@/lib/next/gssp";
-import { Post, prisma } from "@/prisma";
+import { prisma } from "@/prisma";
 import Link from "next/link";
 import { useState } from "react";
 
 type Props = {
   posts: Post[];
+};
+
+type Post = {
+  id: number;
+  title: string;
+  tags: string[];
 };
 
 const Page = ({ posts }: Props) => {
@@ -56,9 +62,5 @@ const Page = ({ posts }: Props) => {
   );
 };
 
-export const getServerSideProps = gssp<Props>(async () => {
-  const posts = await prisma.post.findMany();
-  return { props: { posts } };
-});
-
 export default Page;
+
