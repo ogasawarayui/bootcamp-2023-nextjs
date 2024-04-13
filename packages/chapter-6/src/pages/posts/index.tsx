@@ -62,5 +62,11 @@ const Page = ({ posts }: Props) => {
   );
 };
 
+export const getServerSideProps = gssp<Props>(async () => {
+  const posts = await prisma.post.findMany();
+  return { props: { posts } };
+});
+
+
 export default Page;
 
