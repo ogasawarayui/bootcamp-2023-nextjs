@@ -19,7 +19,7 @@ const Page = ({ post }: Props) => {
   const [error, setError] = useState<string>();
   const { handleSubmit, register, formState } =
     useForm<UpdatePostInputSchemaType>({
-      defaultValues: post, // 📌:6-3 サーバーで取得したデータを、初期値として設定
+      defaultValues: post, //サーバーで取得したデータを、初期値として設定
       resolver: zodResolver(updatePostInputSchema),
     });
   return (
@@ -42,7 +42,6 @@ const Page = ({ post }: Props) => {
             <ErrorMessage message={formState.errors.title?.message} />
           </label>
         </div>
-        {/* <div> ✏️ ② </div> */}
       </fieldset>
       <hr />
       <button>submit</button>
@@ -56,7 +55,7 @@ const Page = ({ post }: Props) => {
 export const getServerSideProps = gssp<Props>(async ({ query }) => {
   // パスパラメーターの id を取得、数値として評価できるかを検証
   const { id } = z.object({ id: z.coerce.number() }).parse(query);
-  // 📌:6-2 Postテーブルから ID が一致するレコードを取得
+  //Postテーブルから ID が一致するレコードを取得
   const post = await prisma.post.findUnique({ where: { id } });
   if (!post) return { notFound: true };
   return { props: { post } };
