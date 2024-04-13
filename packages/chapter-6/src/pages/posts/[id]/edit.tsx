@@ -19,7 +19,9 @@ const Page = ({ post }: Props) => {
   const [error, setError] = useState<string>();
   const { handleSubmit, register, formState } =
     useForm<UpdatePostInputSchemaType>({
-      defaultValues: post, //サーバーで取得したデータを、初期値として設定
+      defaultValues: {
+        title: post.title,//サーバーで取得したデータを、初期値として設定
+      },
       resolver: zodResolver(updatePostInputSchema),
     });
   return (
