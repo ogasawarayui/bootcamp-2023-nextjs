@@ -1,6 +1,7 @@
 import { gssp } from "@/lib/next/gssp";
 import { Post, prisma, Tag } from "@/prisma";
 import Link from "next/link";
+import { Key, ReactElement, JSXElementConstructor, ReactFragment, ReactPortal } from "react";
 import { z } from "zod";
 
 type Props = {
@@ -15,7 +16,7 @@ const Page = ({ post }: Props) => {
       <h1>{post.title}</h1>
       <p>{post.content}</p>
       <div>
-        {post.tags.map((tag) => (
+        {post.tags.map((tag: { id: Key | null | undefined; name: string | number | boolean | ReactElement<any, string | JSXElementConstructor<any>> | ReactFragment | ReactPortal | null | undefined; }) => (
           <span key={tag.id}>{tag.name}</span>
         ))}
       </div>
