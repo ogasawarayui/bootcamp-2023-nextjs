@@ -13,10 +13,7 @@ type Props = {
 
 const Page = ({ post }: Props) => {
   const handleNewTagSubmit = async () => {
-    const element = document.getElementById( // HTMLInputElement
-      'newTagInput',
-    )! as HTMLInputElement;
-    const newTagName = element.value;
+    const newTagName = document.getElementById("newTagInput").value;
     if (newTagName.trim() !== '') {
       try {
         // タグをDBに登録
