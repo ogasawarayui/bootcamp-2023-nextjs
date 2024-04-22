@@ -10,7 +10,7 @@ type Props = {
 type Post = {
   id: number;
   title: string;
-  tags: string[];
+  //tags: string[];
 };
 
 const Page = ({ posts }: Props) => {

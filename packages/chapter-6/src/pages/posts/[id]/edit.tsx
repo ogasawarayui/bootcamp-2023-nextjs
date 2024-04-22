@@ -43,6 +43,11 @@ const Page = ({ post }: Props) => {
             <input type="text" {...register("title")} />
             <ErrorMessage message={formState.errors.title?.message} />
           </label>
+          <label>
+            content:
+            <input type="text" {...register("content")} />
+            <ErrorMessage message={formState.errors.content?.message} />
+          </label>
         </div>
       </fieldset>
       <hr />

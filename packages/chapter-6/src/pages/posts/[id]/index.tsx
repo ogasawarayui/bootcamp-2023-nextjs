@@ -77,7 +77,7 @@ export const getServerSideProps = gssp<Props>(async ({ query }) => {
   });
   const allTags = await prisma.tag.findMany(); // 全てのタグを取得
   if (!post) return { notFound: true };
-  return { props: { post, allTags } };
+  return { props: { post:{...post,allTags:allTags} } };
 });
 
 export default Page;
