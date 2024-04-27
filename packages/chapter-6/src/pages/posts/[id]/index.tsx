@@ -39,7 +39,7 @@ const Page = ({ post }: Props) => {
       }
     }
   };
-
+ console.log(post)
   return (
     <div>
       <h1>{post.title}</h1>

@@ -2,6 +2,7 @@ import { gssp } from "@/lib/next/gssp";
 import { prisma } from "@/prisma";
 import Link from "next/link";
 import { useState } from "react";
+import { GetServerSideProps } from "next";
 
 type Props = {
   posts: {
@@ -35,9 +36,9 @@ const Page = ({ posts }: Props) => {
       console.warn("タグは空白か、既に存在している可能性があります。");
     }
   };
-
+  console.log(selectedTag)
   const filteredPosts = selectedTag
-    ? posts.filter((post) => post.tags.includes(selectedTag))
+    ? posts.filter((post) => post.tags.map((tag) => tag.name.includes(selectedTag)))
     : posts;
 
   const tagButtons = [];
@@ -81,7 +82,7 @@ const Page = ({ posts }: Props) => {
   );
 };
 
-export const getServerSideProps = gssp<Props>(async () => {
+export const getServerSideProps: GetServerSideProps = async (context) => {
   try {
     const posts = await prisma.post.findMany({
       include: {
@@ -99,6 +100,6 @@ export const getServerSideProps = gssp<Props>(async () => {
     console.error("データベースから記事を取得できませんでした。", error);
     return { props: { posts: [] } }; // エラー時に空のリスト
   }
-});
+};
 
 export default Page;
