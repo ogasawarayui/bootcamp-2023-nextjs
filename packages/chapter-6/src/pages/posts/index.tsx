@@ -38,7 +38,7 @@ const Page = ({ posts }: Props) => {
   };
   console.log(selectedTag)
   const filteredPosts = selectedTag
-    ? posts.filter((post) => post.tags.map((tag) => tag.name.includes(selectedTag)))
+    ? posts.filter((post) => post.tags.some((tag) => tag.name.includes(selectedTag)))
     : posts;
 
   const tagButtons = [];
@@ -85,6 +85,7 @@ const Page = ({ posts }: Props) => {
 export const getServerSideProps: GetServerSideProps = async (context) => {
   try {
     const posts = await prisma.post.findMany({
+
       include: {
         tags: true,
       },
