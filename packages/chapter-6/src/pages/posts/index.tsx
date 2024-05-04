@@ -18,10 +18,10 @@ type Post = {
   tags: { id: number; name: string; }[]; // 同様に変更
 };
 
-const Page = ({ posts }: Props) => {
+const Page = ({ posts, tags }: { posts: Post[]; tags: { id: number; name: string }[] }) => {
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
   const [newTag, setNewTag] = useState<string>("");
-  const [tags, setTags] = useState<string[]>(["Tech", "Programming", "Science", "Art"]);
+  const [tagList, setTagList] = useState<string[]>(tags.map((tag) => tag.name));
 
   const handleTagSelect = (tag: string) => {
     setSelectedTag(tag);
@@ -29,29 +29,33 @@ const Page = ({ posts }: Props) => {
 
   const handleNewTagSubmit = () => {
     const trimmedTag = newTag.trim();
-    if (trimmedTag !== "" && !tags.includes(trimmedTag)) {
-      setTags(tags.concat(trimmedTag));
+    if (trimmedTag !== "" && !tagList.includes(trimmedTag)) {
+      setTagList(tagList.concat(trimmedTag));
       setNewTag("");
     } else {
       console.warn("タグは空白か、既に存在している可能性があります。");
     }
   };
-  console.log(selectedTag)
+
+  console.log(selectedTag);
+
   const filteredPosts = selectedTag
     ? posts.filter((post) => post.tags.some((tag) => tag.name.includes(selectedTag)))
     : posts;
 
-  const tagButtons = [];
+  const tagButtons: JSX.Element[] = [];
+
   for (let i = 0; i < tags.length; i++) {
     const tag = tags[i];
+    const tagName = typeof tag === "string" ? tag : tag.name;
     tagButtons.push(
-      <button key={tag} onClick={() => handleTagSelect(tag)}>
-        {tag}
+      <button key={tagName} onClick={() => handleTagSelect(tagName)}>
+        {tagName}
       </button>
     );
   }
 
-  const postList = [];
+  const postList: JSX.Element[] = [];
   for (let i = 0; i < filteredPosts.length; i++) {
     const post = filteredPosts[i];
     postList.push(
@@ -82,10 +86,12 @@ const Page = ({ posts }: Props) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  try {
-    const posts = await prisma.post.findMany({
 
+export const getServerSideProps: GetServerSideProps = async () => {
+  try {
+    const tags = await prisma.tag.findMany();
+
+    const posts = await prisma.post.findMany({
       include: {
         tags: true,
       },
@@ -93,13 +99,14 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
     const transformedPosts = posts.map((post) => ({
       ...post,
-      tags: post.tags.map((tag) => tag.name), // オブジェクトから文字列への変換
+      tags: post.tags, // オブジェクトから文字列への変換
     }));
 
-    return { props: { posts: transformedPosts } }; // propsに変換されたデータを渡す
+    // 取得したタグデータをpropsに含めてクライアントに渡す
+    return { props: { posts: transformedPosts, tags } };
   } catch (error) {
     console.error("データベースから記事を取得できませんでした。", error);
-    return { props: { posts: [] } }; // エラー時に空のリスト
+    return { props: { posts: [], tags: [] } }; // エラー時のデフォルト値
   }
 };
 
